@@ -1,14 +1,17 @@
+// src/pages/CandidateSearch.tsx
 import { useState, useEffect } from 'react';
 import { searchGithub } from '../api/API';
 import { Candidate } from '../interfaces/Candidate.interface';
+import './CandidateSearch.css';
 
 const CandidateSearch: React.FC = () => {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0); 
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const fetchCandidates = async () => {
       const data = await searchGithub();
+      console.log("Fetched candidate data:", data); // Log to verify the data structure
       setCandidates(data);
     };
     fetchCandidates();
@@ -32,18 +35,18 @@ const CandidateSearch: React.FC = () => {
   const candidate = candidates[currentIndex];
 
   return (
-    <section>
-      <img src={candidate.avatar_url} alt={candidate.name || candidate.username} />
-      <h2>{candidate.name || candidate.username}</h2>
-      <p>Location: {candidate.location || 'Not available'}</p>
-      <p>Email: {candidate.email || 'Not available'}</p>
-      <p>Company: {candidate.company || 'Not available'}</p>
-      <a href={candidate.html_url} target="_blank" rel="noopener noreferrer">
+    <section className="candidate-card">
+      <img src={candidate.avatar_url} alt={candidate.name || candidate.login} className="avatar" />
+      <h2 className="name">{candidate.name || candidate.login}</h2>
+      <p className="location">Location: {candidate.location || 'Not available'}</p>
+      <p className="email">Email: {candidate.email || 'Not available'}</p>
+      <p className="company">Company: {candidate.company || 'Not available'}</p>
+      <a href={candidate.html_url} target="_blank" rel="noopener noreferrer" className="profile-link">
         GitHub Profile
       </a>
-      <div>
-        <button onClick={saveCandidate}>+</button>
-        <button onClick={nextCandidate}>-</button>
+      <div className="actions">
+        <button onClick={nextCandidate} className="reject-button">-</button>
+        <button onClick={saveCandidate} className="save-button">+</button>
       </div>
     </section>
   );
